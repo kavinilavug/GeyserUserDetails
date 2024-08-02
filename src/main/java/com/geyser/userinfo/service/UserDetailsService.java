@@ -3,10 +3,8 @@ package com.geyser.userinfo.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.geyser.userinfo.customexception.BusinessException;
 import com.geyser.userinfo.entity.UserDetails;
 import com.geyser.userinfo.repository.UserRepository;
@@ -64,7 +62,7 @@ public class UserDetailsService {
 		}
 	}
 
-	public String deleteUserById(Long userid) throws Exception {
+	public String deleteUserById(Long userid) {
 		try {
 				userRepository.deleteById(userid);
 				return "succesfully deleted";

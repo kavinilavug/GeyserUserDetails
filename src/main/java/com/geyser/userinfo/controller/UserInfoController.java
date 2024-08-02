@@ -1,7 +1,7 @@
 package com.geyser.userinfo.controller;
 
 import java.util.List;
-
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.geyser.userinfo.customexception.BusinessException;
-import com.geyser.userinfo.customexception.ControllerException;
+import com.geyser.userinfo.customexception.ApiResponse;
 import com.geyser.userinfo.entity.UserDetails;
-import com.geyser.userinfo.model.SuccesMessage;
+import com.geyser.userinfo.model.UserDetailModel;
 import com.geyser.userinfo.service.UserDetailsService;
 
 @RestController
@@ -26,103 +24,72 @@ public class UserInfoController {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-
 	@Autowired
-	private SuccesMessage succesMessage;
-
+	private UserDetails userDetails;
+	
+	
 	@GetMapping("/check")
 	String checkingApi() {
 		return "Welcome geyser";
 	}
 
 	@PostMapping("/user")
-	public ResponseEntity<?> createUser(@RequestBody UserDetails userDetails) {
-		try {
-			UserDetails userdet = userDetailsService.saveUser(userDetails);
-			succesMessage.setSuccessCode("701");
-			succesMessage.setSuccessmessage("User is created");
-			return new ResponseEntity<>(succesMessage, HttpStatus.CREATED);
-		} catch (BusinessException e)// custom Exception
-		{
-			ControllerException exp = new ControllerException(e.getErrorCode(), e.getErrorMessage());
-			return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
-		} catch (Exception e)// generic exception
-		{
-			ControllerException exp = new ControllerException("501", "Something went wrong in controller");
-			return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> createUser(@Valid @RequestBody UserDetailModel UserDetailModel) {
+
+		userDetails.setUsername(UserDetailModel.getUsername());
+		userDetails.setPassword(UserDetailModel.getPassword());
+		userDetails.setEmail(UserDetailModel.getEmail());
+		userDetails.setAge(UserDetailModel.getAge());
+		userDetails.setPhoneNumber(UserDetailModel.getPhoneNumber());
+
+		UserDetails userdet = userDetailsService.saveUser(userDetails);
+		UserDetailModel.setUsername(userdet.getUsername());
+		UserDetailModel.setPassword(userdet.getPassword());
+		UserDetailModel.setAge(userdet.getAge());
+		UserDetailModel.setPhoneNumber(userdet.getPhoneNumber());
+		UserDetailModel.setEmail(userdet.getEmail());
+
+		ApiResponse<UserDetailModel> response = new ApiResponse<>(true, "User registered successfully!", UserDetailModel);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);//Httpstatus code for created : 201 
+
 	}
 
 	@PutMapping("/user/{userid}")
-	public ResponseEntity<?> updateUser(@PathVariable("userid") Long userid, @RequestBody UserDetails userDetails) {
-		try {
-			userDetailsService.updateUserById(userid, userDetails);
-			succesMessage.setSuccessCode("702");
-			succesMessage.setSuccessmessage("User updated successfully");
-			return new ResponseEntity<>(succesMessage, HttpStatus.OK);
-		} catch (BusinessException e)// custom Exception
-		{
-			ControllerException exp = new ControllerException(e.getErrorCode(), e.getErrorMessage());
-			return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-		} catch (Exception e)// generic exception
-		{
-			ControllerException exp = new ControllerException("502", "Something went wrong in controller");
-			return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> updateUser(@PathVariable("userid") Long userid,  @RequestBody UserDetailModel userDetailModel) {		
+		userDetails.setUsername(userDetailModel.getUsername());
+		userDetails.setPassword(userDetailModel.getPassword());
+		userDetails.setEmail(userDetailModel.getEmail());
+		userDetails.setAge(userDetailModel.getAge());
+		userDetails.setPhoneNumber(userDetailModel.getPhoneNumber());		
+		UserDetails updateUser=userDetailsService.updateUserById(userid, userDetails);
+		userDetailModel.setUsername(updateUser.getUsername());
+		userDetailModel.setPassword(updateUser.getPassword());
+		userDetailModel.setAge(updateUser.getAge());
+		userDetailModel.setPhoneNumber(updateUser.getPhoneNumber());
+		userDetailModel.setEmail(updateUser.getEmail());
+		ApiResponse<UserDetailModel> response = new ApiResponse<>(true, "User updated successfully!", userDetailModel);
+		return new ResponseEntity<>(response, HttpStatus.OK);//Httpstatus code for update : 200 
 	}
 
 	@GetMapping("/user")
 	public ResponseEntity<?> getAllUser() {
-		try {
-			List<UserDetails> userdetailsList = userDetailsService.selectAllUser();
-			return new ResponseEntity<List<UserDetails>>(userdetailsList, HttpStatus.OK);
-
-		} catch (BusinessException e)// custom Exception
-		{
-			ControllerException exp = new ControllerException(e.getErrorCode(), e.getErrorMessage());
-			return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-		} catch (Exception e)// generic exception
-		{
-			ControllerException exp = new ControllerException("503", "Something went wrong in controller");
-			return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-		}
-
+		List<UserDetails> userdetailsList = userDetailsService.selectAllUser();
+		ApiResponse<List<UserDetails>> response = new ApiResponse<>(true, "get the user details successfully!", userdetailsList);
+		return new ResponseEntity<>(response, HttpStatus.OK);//Httpstatus code for update : 200
 	}
 
 	@GetMapping("/user/{userid}")
 	public ResponseEntity<?> getAllUser(@PathVariable Long userid) {
 		UserDetails userdata;
-		try {
-			userdata = userDetailsService.selectUserId(userid);
-			return new ResponseEntity<UserDetails>(userdata, HttpStatus.OK);
-		} catch (BusinessException e)// custom Exception
-		{
-			ControllerException exp = new ControllerException(e.getErrorCode(), e.getErrorMessage());
-			return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
-		} catch (Exception e)// generic exception
-		{
-			ControllerException exp = new ControllerException("503", "Something went wrong controller");
-			return new ResponseEntity<>(exp, HttpStatus.BAD_REQUEST);
-		}
+		userdata = userDetailsService.selectUserId(userid);
+		ApiResponse<UserDetails> response = new ApiResponse<>(true, "get the user detail successfully!", userdata);
+		return new ResponseEntity<>(response, HttpStatus.OK);//Httpstatus code for update : 200
 	}
 
 	@DeleteMapping("/user/{userid}")
-	public ResponseEntity<?> deleteUser(@PathVariable("userid") Long userid) {
-		try {
-			userDetailsService.deleteUserById(userid);
-			succesMessage.setSuccessCode("703");
-			succesMessage.setSuccessmessage("Deleted successfully");
-			return new ResponseEntity<>(succesMessage, HttpStatus.OK);
-		} catch (BusinessException e)// custom Exception
-		{
-			ControllerException exp = new ControllerException(e.getErrorCode(), e.getErrorMessage());
-			return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-		} catch (Exception e)// generic exception
-		{
-			ControllerException exp = new ControllerException("504", "Something went wrong controller");
-			return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-		}
-		
-		
+	public <T> ResponseEntity<?> deleteUser(@PathVariable("userid") Long userid) {
+		userDetailsService.deleteUserById(userid);
+		ApiResponse<T> response = new ApiResponse<>(true, "get the user detail successfully!");
+		return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);//Httpstatus code for update : 204
 	}
 }

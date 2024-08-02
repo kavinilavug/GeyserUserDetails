@@ -9,8 +9,6 @@ import com.geyser.userinfo.entity.UserDetails;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserDetails, Long> {
-
 	Optional<UserDetails> findById(Long userid);
-
 	Object deleteById(int userid);
 }
