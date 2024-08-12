@@ -11,15 +11,12 @@ import org.springframework.stereotype.Component;
 @Entity(name = "userdetails")
 @Component
 public class UserDetails {
-<<<<<<< HEAD
 	@Override
 	public String toString() {
 		return "UserDetails [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
 				+ ", age=" + age + ", phoneNumber=" + phoneNumber + "]";
 	}
 
-=======
->>>>>>> branch 'main' of https://github.com/kavinilavug/GeyserUserDetails.git
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-<<<<<<< HEAD
 @ControllerAdvice
 public class UserGlobalException extends ResponseEntityExceptionHandler {
 
@@ -48,42 +47,9 @@ public class UserGlobalException extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<Object>(response, HttpStatus.METHOD_NOT_ALLOWED);// 405
 	}
 
-	@ExceptionHandler(Exception.class)
+	/*@ExceptionHandler(Exception.class)
 	ResponseEntity<?> handleException(Exception req) {
 		BusinessException res = new BusinessException(false,"Please Check The error"+req.getStackTrace());
 		return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);// 400
-=======
-import com.geyser.userinfo.model.UserDetailModel;
-
-@ControllerAdvice
-public class UserGlobalException extends ResponseEntityExceptionHandler {
-
-	@ExceptionHandler(NoSuchElementException.class)
-	ResponseEntity<?> handleNoSuchElenent(NoSuchElementException elementException) {
-		// Assume this method fetches a user by ID
-		// if the value is not there that tym we will get it
-		ApiResponse<Map<String, String>> response = new ApiResponse<>(false, "No value is present in DB for userid");
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);//400 
-	}
-
-	@ExceptionHandler(BusinessException.class)
-	ResponseEntity<?> handleBusinessException(BusinessException exe) {
-		ControllerException exp = new ControllerException(exe.getErrorCode(), exe.getErrorMessage());
-		return new ResponseEntity<ControllerException>(exp, HttpStatus.BAD_REQUEST);
-	}
-
-	@Override
-	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-		ApiResponse<Map<String, String>> response = new ApiResponse<>(false, "please change the http method type");
-		return new ResponseEntity<Object>(response, HttpStatus.METHOD_NOT_ALLOWED);//405 
-	}
-
-	@ExceptionHandler(IllegalArgumentException.class)
-	ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException illegalException) {
-		ApiResponse<Map<String, String>> response = new ApiResponse<>(false, "No value is present in DB");
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);//400
->>>>>>> branch 'main' of https://github.com/kavinilavug/GeyserUserDetails.git
-	}
+	}*/
 }
