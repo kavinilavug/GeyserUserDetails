@@ -2,6 +2,7 @@ package com.geyser.userinfo.model;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
+<<<<<<< HEAD
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -30,6 +31,37 @@ public class UserDetailModel {
 	@NotNull(message = "Age is mandatory")
 	@Min(value = 0, message = "Age must be between 0 and 99")
     @Max(value = 99, message = "Age must be between 0 and 99")
+=======
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserDetailModel {
+	@NotBlank(message = "Username is mandatory")
+	@Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+	@Column(name = "username")
+	private String username;
+
+	@NotBlank(message = "Password is mandatory")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$",
+             message = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character (@#$%^&+=)")
+	@Column(name = "password")
+	private String password;
+	
+	@NotBlank(message = "email is mandatory")
+	@Email(message = "Please provide a valid email address")
+	@Column(name = "email")
+	private String email;
+
+	@NotNull(message = "Age is mandatory")
+	@Min(value = 18, message = "Age must be at least 18")
+>>>>>>> branch 'main' of https://github.com/kavinilavug/GeyserUserDetails.git
 	private Integer age;
 
 	@Pattern(regexp = "\\d{3}-\\d{3}-\\d{4}", message = "Kindly Provide a Valid phone number")
