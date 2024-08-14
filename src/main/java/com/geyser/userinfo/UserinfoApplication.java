@@ -15,3 +15,4 @@ public class UserinfoApplication {
 		SpringApplication.run(UserinfoApplication.class, args);
 	}
 }
+

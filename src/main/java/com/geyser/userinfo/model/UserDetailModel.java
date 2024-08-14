@@ -14,7 +14,11 @@ import javax.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 
 @Component
+//becase of redis cache i have used the serializable
 public class UserDetailModel implements Serializable{
+	
+	private int id;
+	
 	@NotBlank(message = "Username is mandatory")
 	@Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
 	private String username;

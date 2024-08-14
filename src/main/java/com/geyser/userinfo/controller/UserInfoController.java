@@ -44,6 +44,7 @@ public class UserInfoController {
 
 	@PostMapping("/user")
 	public ResponseEntity<?> createUser(@Valid @RequestBody UserDetailModel UserDetailModel) {
+		userDetails.setId(null);//if you not giving nulll next tym wont be insert the record
 		userDetails.setUsername(UserDetailModel.getUsername());
 		userDetails.setPassword(UserDetailModel.getPassword());
 		userDetails.setEmail(UserDetailModel.getEmail());
@@ -51,6 +52,7 @@ public class UserInfoController {
 		userDetails.setPhoneNumber(UserDetailModel.getPhoneNumber());
 
 		UserDetails userdet = userDetailsService.saveUser(userDetails);
+		
 		UserDetailModel.setUsername(userdet.getUsername());
 		UserDetailModel.setPassword(userdet.getPassword());
 		UserDetailModel.setAge(userdet.getAge());
@@ -64,8 +66,6 @@ public class UserInfoController {
 	}
 
 	@PutMapping("/user/{userid}")
-	//@CachePut(cacheNames = "UserDetails", key = "#p0")
-	//@CachePut(cacheNames = "UserDetails", key = "#p0")
 	public ResponseEntity<?> updateUser(@PathVariable("userid") Long userid,
 			@RequestBody UserDetailModel userDetailModel) {
 		userDetails.setUsername(userDetailModel.getUsername());
@@ -96,8 +96,6 @@ public class UserInfoController {
 	}
 
 	@GetMapping("/user/{userid}")
-	//@Cacheable(cacheNames = "UserDetails", key = "#p0")
-	//@Cacheable(cacheNames = "UserDetails", key = "#p0")
 	public ResponseEntity<?> getAllUser(@PathVariable(required = true) @NotBlank Long userid) {
 		try {
 			if (userid <= 0) {
@@ -112,8 +110,6 @@ public class UserInfoController {
 	}
 
 	@DeleteMapping("/user/{userid}")
-	//@CacheEvict(cacheNames = "UserDetails", key = "#p0")
-	//@CacheEvict(cacheNames = "UserDetails", key = "#p0")
 	public <T> ResponseEntity<?> deleteUser(@PathVariable("userid") Long userid) {
 		try {
 			if (userid <= 0) {

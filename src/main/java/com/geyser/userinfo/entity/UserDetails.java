@@ -5,20 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 import org.springframework.stereotype.Component;
 
 @Entity(name = "userdetails")
 @Component
 public class UserDetails {
-	@Override
-	public String toString() {
-		return "UserDetails [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", age=" + age + ", phoneNumber=" + phoneNumber + "]";
-	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "username")
@@ -29,6 +25,14 @@ public class UserDetails {
 
 	@Column(name = "email")
 	private String email;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	@Column(name = "age")
 	private Integer age;
@@ -55,13 +59,7 @@ public class UserDetails {
 		this.age = age;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
 
 	public String getUsername() {
 		return username;

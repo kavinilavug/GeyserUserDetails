@@ -1,8 +1,6 @@
 package com.geyser.userinfo.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -19,6 +17,7 @@ public class UserDetailsService {
 	private UserRepository userRepository;
 
 	public UserDetails saveUser(UserDetails userDetails) {
+		
 		UserDetails userDataSaved = userRepository.save(userDetails);
 		return userDataSaved;
 	}
